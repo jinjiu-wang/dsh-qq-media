@@ -1,0 +1,18 @@
+name: qq-bridge-media-kit
+version: 1.0.1
+built: 2026-10-23 13:00 +08:00
+target: qq-bridge v0.2.0-r3 / v0.2.0-r4（DSH 0.2.1-rc.2 上验证）
+what:
+  - media_info   看一条消息里有什么媒体（语音/视频/图片/文件），不下载
+  - media_hear   听：语音优先 QQ 自带转写；不行就 SILK→wav→本地识别；视频抽音轨再识别
+  - media_watch  看：视频抽 6 帧拼成一张连续图（带序号+时间），也可 separate=true 出单帧，作为图像交给视觉模型
+requires:
+  - qq-bridge 已跑通（有 OneBot HTTP 端口和 accessToken）
+  - DSH 正在运行（安装器要写它的 profile）
+  - python3 + imageio-ffmpeg / faster-whisper / soundfile / numpy / huggingface_hub<1.0
+  - whisper 模型（small ≈464MB，安装器可代下）
+  - SnowLuma 的 native/ffmpeg/ffmpegAddon.*.node（解 QQ 的 SILK 语音）
+notes:
+  - QQ 的语音文件后缀是 .amr，内容其实��� SILK v3；ffmpeg 解不了，必须用 SnowLuma 的 addon
+  - QQ 的媒体下载链接约 1 小时过期，所以每次调用都重新 get_msg 取新鲜 url
+  - 播放/识别一律在本地，不外传
